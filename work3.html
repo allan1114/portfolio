@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>數據分析儀表板設計 — Your Name</title>
+<style>
+  :root {
+    --c1: #FF4D6D;
+    --c2: #FFBE0B;
+    --c3: #3A86FF;
+    --c4: #8338EC;
+    --bg: #0D0D0D;
+    --bg2: #161616;
+    --text: #F5F5F5;
+    --text-muted: #888;
+    --font: 'Segoe UI', system-ui, sans-serif;
+    --radius: 16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); overflow-x: hidden; }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 1.2rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(13,13,13,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .nav-logo { font-size: 1.3rem; font-weight: 800; background: linear-gradient(135deg, var(--c1), var(--c2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .nav-back { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.3s; }
+  .nav-back:hover { color: var(--text); }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; padding: 8rem 3rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.12; pointer-events: none;
+  }
+  .blob1 { width: 500px; height: 500px; background: var(--c3); top: -100px; right: -100px; }
+  .blob2 { width: 400px; height: 400px; background: var(--c2); bottom: -50px; left: 20%; }
+
+  .hero-tag {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    background: rgba(58,134,255,0.15);
+    border: 1px solid rgba(58,134,255,0.3);
+    border-radius: 999px;
+    font-size: 0.8rem; color: var(--c3); letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 600;
+    margin-bottom: 1.5rem;
+    width: fit-content;
+  }
+  .hero-title {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900; line-height: 1.1;
+    letter-spacing: -1px; margin-bottom: 1.5rem;
+  }
+  .hero-meta {
+    display: flex; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;
+    font-size: 0.95rem;
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 0.3rem; }
+  .meta-label { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+  .meta-value { color: var(--text); font-weight: 700; }
+
+  /* Content Section */
+  section { padding: 4rem 3rem; }
+  .section-tag {
+    font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--c3); margin-bottom: 1rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 900; letter-spacing: -0.5px; margin-bottom: 1.5rem;
+  }
+  .section-text {
+    font-size: 1rem; color: var(--text-muted);
+    line-height: 1.8; max-width: 720px; margin-bottom: 2rem;
+  }
+  .content-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3rem; align-items: start; margin-top: 2rem;
+  }
+  .content-img {
+    width: 100%; aspect-ratio: 1;
+    background: linear-gradient(135deg, rgba(58,134,255,0.15), rgba(255,190,11,0.15));
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; position: relative; overflow: hidden;
+  }
+  .content-img::after {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 10px);
+  }
+  .content-img span { z-index: 1; }
+  .content-text h3 { font-size: 1.3rem; margin-bottom: 1rem; }
+  .content-text p { color: var(--text-muted); line-height: 1.8; margin-bottom: 1rem; }
+  .content-text ul { margin-left: 1.5rem; color: var(--text-muted); line-height: 1.8; }
+  .content-text li { margin-bottom: 0.5rem; }
+
+  .highlight-box {
+    background: rgba(58,134,255,0.08);
+    border-left: 4px solid var(--c3);
+    padding: 2rem;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: 2rem 0;
+  }
+  .highlight-box h4 {
+    font-size: 0.85rem; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--c3); margin-bottom: 0.5rem;
+  }
+  .highlight-box p { color: var(--text-muted); line-height: 1.7; }
+
+  .feature-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem; margin: 2rem 0;
+  }
+  .feature-card {
+    background: var(--bg2); padding: 1.5rem;
+    border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.06);
+  }
+  .feature-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .feature-title { font-weight: 700; margin-bottom: 0.5rem; }
+  .feature-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.8rem 2rem; border-radius: 999px;
+    font-size: 0.95rem; font-weight: 700;
+    text-decoration: none; background: linear-gradient(135deg, var(--c3), var(--c2));
+    color: #fff; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(58,134,255,0.4); }
+
+  /* Footer */
+  footer {
+    padding: 3rem; text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .footer-link { color: var(--text-muted); text-decoration: none; font-weight: 600; transition: color 0.3s; }
+  .footer-link:hover { color: var(--text); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { padding: 7rem 1.5rem 4rem; }
+    section { padding: 3rem 1.5rem; }
+    .content-grid { grid-template-columns: 1fr; }
+    .hero-meta { flex-direction: column; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">YN.</div>
+  <a href="index.html" class="nav-back">← 返回作品集</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-blob blob1"></div>
+  <div class="hero-blob blob2"></div>
+
+  <div class="hero-tag">📊 Dashboard — Data Visualization</div>
+  <h1 class="hero-title">數據分析<br>儀表板設計</h1>
+
+  <div class="hero-meta">
+    <div class="meta-item">
+      <div class="meta-label">客戶</div>
+      <div class="meta-value">B2B SaaS Platform</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">年份</div>
+      <div class="meta-value">2024</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">職位</div>
+      <div class="meta-value">Product Designer</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">重點</div>
+      <div class="meta-value">Data Viz, UX</div>
+    </div>
+  </div>
+</section>
+
+<!-- 背景 -->
+<section style="background: var(--bg2);">
+  <div class="section-tag">背景</div>
+  <h2 class="section-title">挑戰</h2>
+  <p class="section-text">
+    這款 B2B SaaS 產品為企業提供複雜的數據分析服務，但原有的儀表板設計令非技術用戶感到困惑。大量的數據和參數選項堆砌在一起，用戶需要花費大量時間才能找到他們想要的信息。轉化率停滯，客戶滿意度下降。
+  </p>
+
+  <div class="highlight-box">
+    <h4>核心問題</h4>
+    <p>• 信息過載：數據和控件過多，用戶迷失<br>
+    • 缺乏優先級：所有信息同等重要，導致困惑<br>
+    • 交互複雜：需要多步操作才能看到有用信息</p>
+  </div>
+</section>
+
+<!-- 研究 -->
+<section>
+  <div class="section-tag">方法</div>
+  <h2 class="section-title">用戶研究</h2>
+
+  <div class="content-grid">
+    <div>
+      <div class="content-img">🔍</div>
+    </div>
+    <div class="content-text">
+      <h3>深度訪談與測試</h3>
+      <p>我進行了 15+ 場用戶訪談，發現：</p>
+      <ul>
+        <li>用戶首先關注 KPI，其次才是詳細數據</li>
+        <li>他們希望「快速掃一眼」就能了解整體狀況</li>
+        <li>詳細數據應該「按需隱藏」，不是預設展示</li>
+      </ul>
+      <p style="margin-top: 1rem;">基於「漸進式揭露」原則，我重新設計了整個儀表板。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 設計方案 -->
+<section style="background: var(--bg2);">
+  <div class="section-tag">設計策略</div>
+  <h2 class="section-title">信息架構</h2>
+
+  <div class="content-grid">
+    <div class="content-text">
+      <h3>分層設計</h3>
+      <p><strong>第 1 層：概覽</strong><br>
+      關鍵指標卡片，用大字號和顏色快速傳遞信息。用戶一眼就能掌握全局。</p>
+
+      <p style="margin-top: 1rem;"><strong>第 2 層：數據探索</strong><br>
+      點擊進入「詳情」後，展示圖表、趨勢分析。互動式圖表讓用戶自主探索。</p>
+
+      <p style="margin-top: 1rem;"><strong>第 3 層：深度分析</strong><br>
+      高級篩選、導出、報告生成等功能隱藏在二級菜單，不打擾主流程。</p>
+    </div>
+    <div>
+      <div class="content-img">📈</div>
+    </div>
+  </div>
+
+  <p class="section-text">
+    這種漸進式設計讓新手用戶不會被複雜功能嚇到，而進階用戶也能快速找到他們需要的工具。
+  </p>
+</section>
+
+<!-- 設計特色 -->
+<section>
+  <div class="section-tag">核心特性</div>
+  <h2 class="section-title">設計亮點</h2>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <div class="feature-title">顏色編碼</div>
+      <div class="feature-desc">綠（良好）、黃（警告）、紅（危險），用顏色快速傳遞數據意義，減少認知負擔。</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">圖表多樣性</div>
+      <div class="feature-desc">為不同數據類型選擇合適的圖表形式（折線圖、柱狀圖、熱力圖），提升可讀性。</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title">互動反饋</div>
+      <div class="feature-desc">hover 時顯示詳細數值，點擊鑽取細節。快速反饋讓探索過程更流暢。</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <div class="feature-title">響應式設計</div>
+      <div class="feature-desc">在桌面、平板、手機上都能清晰展示。卡片式排列自適應各種屏幕。</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔔</div>
+      <div class="feature-title">警報與通知</div>
+      <div class="feature-desc">異常數據自動高亮，用戶可設定警報規則，不再錯過重要變化。</div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">💾</div>
+      <div class="feature-title">自訂檢視</div>
+      <div class="feature-desc">用戶可保存常用的篩選組合和佈局，下次登入自動載入。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 成果 -->
+<section style="background: var(--bg2);">
+  <div class="section-tag">結果</div>
+  <h2 class="section-title">量化影響</h2>
+
+  <div class="highlight-box">
+    <h4>用戶體驗提升</h4>
+    <p>• 平均時間到達關鍵信息：從 4.2 分鐘降至 0.8 分鐘<br>
+    • 用戶滿意度：從 2.3/5 提升至 4.6/5<br>
+    • 功能發現率提升 180%（用戶更多地探索高級功能）<br>
+    • 客戶留存率提升 22%</p>
+  </div>
+
+  <p class="section-text" style="margin-top: 2rem;">
+    <strong>商業成效：</strong>新設計上線後，客戶流失率下降，升級至高級方案的轉化率提升 18%。產品也因為良好的用戶體驗獲得了多個行業設計獎。
+  </p>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p style="margin-bottom: 1.5rem;">看完這個案例？</p>
+  <a href="index.html" class="footer-link">← 返回作品集</a>
+  <p style="margin-top: 2rem; color: var(--text-muted); font-size: 0.85rem;">© 2026 Your Name</p>
+</footer>
+
+</body>
+</html>
