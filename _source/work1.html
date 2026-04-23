@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電商 App 購物體驗重設計 — Your Name</title>
+<style>
+  :root {
+    --c1: #FF4D6D;
+    --c2: #FFBE0B;
+    --c3: #3A86FF;
+    --c4: #8338EC;
+    --bg: #0D0D0D;
+    --bg2: #161616;
+    --text: #F5F5F5;
+    --text-muted: #888;
+    --font: 'Segoe UI', system-ui, sans-serif;
+    --radius: 16px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); overflow-x: hidden; }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 1.2rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(13,13,13,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .nav-logo { font-size: 1.3rem; font-weight: 800; background: linear-gradient(135deg, var(--c1), var(--c2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .nav-back { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.3s; }
+  .nav-back:hover { color: var(--text); }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; padding: 8rem 3rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); opacity: 0.12; pointer-events: none;
+  }
+  .blob1 { width: 500px; height: 500px; background: var(--c1); top: -100px; right: -100px; }
+  .blob2 { width: 400px; height: 400px; background: var(--c4); bottom: -50px; left: 20%; }
+
+  .hero-tag {
+    display: inline-block;
+    padding: 0.35rem 1rem;
+    background: rgba(255,77,109,0.15);
+    border: 1px solid rgba(255,77,109,0.3);
+    border-radius: 999px;
+    font-size: 0.8rem; color: var(--c1); letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 600;
+    margin-bottom: 1.5rem;
+    width: fit-content;
+  }
+  .hero-title {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900; line-height: 1.1;
+    letter-spacing: -1px; margin-bottom: 1.5rem;
+  }
+  .hero-meta {
+    display: flex; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;
+    font-size: 0.95rem;
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 0.3rem; }
+  .meta-label { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+  .meta-value { color: var(--text); font-weight: 700; }
+
+  /* Content Section */
+  section { padding: 4rem 3rem; }
+  .section-tag {
+    font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--c1); margin-bottom: 1rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 900; letter-spacing: -0.5px; margin-bottom: 1.5rem;
+  }
+  .section-text {
+    font-size: 1rem; color: var(--text-muted);
+    line-height: 1.8; max-width: 720px; margin-bottom: 2rem;
+  }
+  .content-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3rem; align-items: start; margin-top: 2rem;
+  }
+  .content-img {
+    width: 100%; aspect-ratio: 1;
+    background: linear-gradient(135deg, rgba(255,77,109,0.15), rgba(51,56,236,0.15));
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; position: relative; overflow: hidden;
+  }
+  .content-img::after {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 10px);
+  }
+  .content-img span { z-index: 1; }
+  .content-text h3 { font-size: 1.3rem; margin-bottom: 1rem; }
+  .content-text p { color: var(--text-muted); line-height: 1.8; margin-bottom: 1rem; }
+  .content-text ul { margin-left: 1.5rem; color: var(--text-muted); line-height: 1.8; }
+  .content-text li { margin-bottom: 0.5rem; }
+
+  .highlight-box {
+    background: rgba(255,77,109,0.08);
+    border-left: 4px solid var(--c1);
+    padding: 2rem;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: 2rem 0;
+  }
+  .highlight-box h4 {
+    font-size: 0.85rem; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--c1); margin-bottom: 0.5rem;
+  }
+  .highlight-box p { color: var(--text-muted); line-height: 1.7; }
+
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem; margin: 2rem 0;
+  }
+  .stat-card {
+    background: var(--bg2); padding: 1.5rem;
+    border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.06);
+  }
+  .stat-number {
+    font-size: 2.5rem; font-weight: 900;
+    background: linear-gradient(135deg, var(--c1), var(--c2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+  }
+  .stat-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.8rem 2rem; border-radius: 999px;
+    font-size: 0.95rem; font-weight: 700;
+    text-decoration: none; background: linear-gradient(135deg, var(--c1), var(--c4));
+    color: #fff; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(255,77,109,0.4); }
+
+  /* Footer */
+  footer {
+    padding: 3rem; text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .footer-link { color: var(--text-muted); text-decoration: none; font-weight: 600; transition: color 0.3s; }
+  .footer-link:hover { color: var(--text); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { padding: 7rem 1.5rem 4rem; }
+    section { padding: 3rem 1.5rem; }
+    .content-grid { grid-template-columns: 1fr; }
+    .hero-meta { flex-direction: column; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">YN.</div>
+  <a href="index.html" class="nav-back">← 返回作品集</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-blob blob1"></div>
+  <div class="hero-blob blob2"></div>
+
+  <div class="hero-tag">🛍️ UI/UX — Mobile</div>
+  <h1 class="hero-title">電商 App<br>購物體驗重設計</h1>
+
+  <div class="hero-meta">
+    <div class="meta-item">
+      <div class="meta-label">客戶</div>
+      <div class="meta-value">某品牌電商</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">年份</div>
+      <div class="meta-value">2024</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">角色</div>
+      <div class="meta-value">Lead UX Designer</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">工具</div>
+      <div class="meta-value">Figma, Prototyping</div>
+    </div>
+  </div>
+</section>
+
+<!-- 背景 -->
+<section style="background: var(--bg2);">
+  <div class="section-tag">背景</div>
+  <h2 class="section-title">挑戰</h2>
+  <p class="section-text">
+    客戶的電商 App 面臨購物轉換率低的問題。通過用戶行為分析，我們發現大量用戶在結帳流程中放棄購買。問題不只是 UI 設計，更涉及用戶心理與信任感。
+  </p>
+
+  <div class="highlight-box">
+    <h4>核心問題</h4>
+    <p>• 結帳流程超過 7 步，用戶感到疲勞<br>
+    • 缺乏信任信號，用戶擔心安全性<br>
+    • 購物車遺棄率達 65%，遠高於行業平均</p>
+  </div>
+</section>
+
+<!-- 研究與洞察 -->
+<section>
+  <div class="section-tag">方法論</div>
+  <h2 class="section-title">研究與洞察</h2>
+
+  <div class="content-grid">
+    <div>
+      <div class="content-img">📊</div>
+    </div>
+    <div class="content-text">
+      <h3>用戶研究</h3>
+      <p>我們進行了 20+ 場深度訪談和可用性測試，發現：</p>
+      <ul>
+        <li><strong>心理障礙</strong> — 用戶擔心支付安全，需要多次確認</li>
+        <li><strong>認知負擔</strong> — 過多選項和步驟造成決策疲勞</li>
+        <li><strong>缺乏反饋</strong> — 每步操作後缺乏清晰的進度提示</li>
+      </ul>
+      <p style="margin-top: 1rem;">基於這些洞察，我們設計了更簡潔、更具信任感的購物流程。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 設計方案 -->
+<section style="background: var(--bg2);">
+  <div class="section-tag">解決方案</div>
+  <h2 class="section-title">設計策略</h2>
+
+  <div class="content-grid">
+    <div class="content-text">
+      <h3>1. 簡化結帳流程</h3>
+      <p>從 7 步減至 3 步，只保留必要資訊。使用「漸進式揭露」設計，根據用戶決策動態顯示選項。</p>
+
+      <h3 style="margin-top: 2rem;">2. 強化信任感</h3>
+      <p>加入安全徽章、用戶評價、退貨政策等信任信號，在整個流程中視覺化安全承諾。</p>
+
+      <h3 style="margin-top: 2rem;">3. 清晰的進度指示</h3>
+      <p>設計了直觀的進度條和步驟指示，讓用戶始終知道自己在哪裡，還需做什麼。</p>
+    </div>
+    <div>
+      <div class="content-img">🎨</div>
+    </div>
+  </div>
+</section>
+
+<!-- 成果 -->
+<section>
+  <div class="section-tag">結果</div>
+  <h2 class="section-title">量化成效</h2>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number">38%</div>
+      <div class="stat-label">結帳完成率提升</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">52%</div>
+      <div class="stat-label">購物車遺棄率下降</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">2.3 步</div>
+      <div class="stat-label">平均結帳步數</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">4.8/5</div>
+      <div class="stat-label">用戶滿意度評分</div>
+    </div>
+  </div>
+
+  <div class="highlight-box" style="margin-top: 2rem;">
+    <h4>商業影響</h4>
+    <p>首月上線後，轉換率提升 38%，相當於額外增收 $240K。同時，用戶支持工單減少 45%，證明設計改善了用戶體驗並減輕了客服壓力。</p>
+  </div>
+</section>
+
+<!-- 反思 -->
+<section style="background: var(--bg2);">
+  <div class="section-tag">學習</div>
+  <h2 class="section-title">設計反思</h2>
+  <p class="section-text">
+    這個項目讓我深刻理解到：<strong>好的設計不是看起來漂亮，而是能解決真實問題。</strong> 通過用戶研究、數據驅動與迭代測試，我們從 65% 的購物車遺棄率轉變為 24% — 這不只是設計成就，更是商業價值的直接體現。
+  </p>
+  <p class="section-text">
+    未來，我會持續關注行為心理學和 A/B 測試，確保每個設計決策都有數據支持。
+  </p>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p style="margin-bottom: 1.5rem;">看完這個案例？</p>
+  <a href="index.html" class="footer-link">← 返回作品集</a>
+  <p style="margin-top: 2rem; color: var(--text-muted); font-size: 0.85rem;">© 2026 Your Name</p>
+</footer>
+
+</body>
+</html>

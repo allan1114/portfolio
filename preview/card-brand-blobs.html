@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+  html,body{margin:0;background:#0D0D0D;color:#F5F5F5;font-family:'Inter',system-ui,sans-serif;overflow:hidden}
+  .stage{position:relative;height:180px;overflow:hidden}
+  .blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.22;pointer-events:none}
+  .b1{width:260px;height:260px;background:#FF4D6D;top:-60px;right:-40px;animation:m 8s ease-in-out infinite alternate}
+  .b2{width:220px;height:220px;background:#8338EC;bottom:-40px;left:28%;animation:m 10s ease-in-out infinite alternate-reverse}
+  .b3{width:180px;height:180px;background:#3A86FF;top:20%;left:-50px;animation:m 12s ease-in-out infinite alternate}
+  @keyframes m{from{transform:scale(1) translate(0,0)}to{transform:scale(1.2) translate(30px,20px)}}
+  .lbl{padding:12px 24px;font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#888;position:relative;z-index:2}
+</style></head><body>
+<div class="stage">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+</div>
+<div class="lbl">3 blobs · blur(80px) · opacity .18 · scale+translate loop at 8s / 10s / 12s — never sync</div>
+</body></html>

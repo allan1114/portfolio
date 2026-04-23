@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio UI Kit — Modern Portfolio</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="pk-body">
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="PartsA.jsx"></script>
+<script type="text/babel" src="PartsB.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+  const { useState, useEffect } = React;
+
+  function App() {
+    const [page, setPage] = useState(() => localStorage.getItem('pk-page') || 'home');
+    const [openWorkId, setOpenWorkId] = useState(() => localStorage.getItem('pk-work'));
+
+    useEffect(() => { localStorage.setItem('pk-page', page); }, [page]);
+    useEffect(() => {
+      if (openWorkId) localStorage.setItem('pk-work', openWorkId);
+      else localStorage.removeItem('pk-work');
+    }, [openWorkId]);
+
+    useEffect(() => {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('pk-visible'); });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('.pk-reveal').forEach(el => obs.observe(el));
+      return () => obs.disconnect();
+    }, [page, openWorkId]);
+
+    const goHome = () => { setPage('home'); setOpenWorkId(null); window.scrollTo(0,0); };
+    const openCase = id => { setOpenWorkId(id); setPage('case'); window.scrollTo(0,0); };
+
+    const work = WORKS.find(w => w.id === openWorkId);
+
+    return (
+      <>
+        <Cursor />
+        <Nav variant={page === 'home' ? 'home' : 'case'} onNav={goHome} />
+        {page === 'home' ? (
+          <>
+            <Hero />
+            <About />
+            <Works onOpen={openCase} />
+            <Contact />
+            <Footer />
+          </>
+        ) : work ? (
+          <CaseStudy work={work} onBack={goHome} />
+        ) : (
+          <div style={{padding:'10rem 3rem',textAlign:'center'}}>Work not found. <a href="#" onClick={e=>{e.preventDefault();goHome();}}>Back</a></div>
+        )}
+      </>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

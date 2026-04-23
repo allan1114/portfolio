@@ -1,0 +1,230 @@
+/* ============================================================
+   Modern Portfolio — Design Tokens
+   Colors, typography, spacing, radii, shadows, motion
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+
+:root {
+  /* ────────────────────────────────────────────────────────
+     PRIMARY PALETTE — "Vibrant 4"
+     Four accent colors used together in gradients + tags.
+     Every hue is fully saturated; they're loud on purpose.
+  ──────────────────────────────────────────────────────── */
+  --c1: #FF4D6D;   /* Vibrant Red    — primary brand color */
+  --c2: #FFBE0B;   /* Bold Yellow    — accent / attention */
+  --c3: #3A86FF;   /* Bright Blue    — accent / dashboards */
+  --c4: #8338EC;   /* Deep Purple    — accent / brand secondary */
+  --c5: #06D6A0;   /* Mint Green     — extra accent (data viz) */
+
+  /* Tinted versions @ 22% opacity — used for work-card thumbs & tag bgs */
+  --c1-tint: rgba(255, 77, 109, 0.133);
+  --c2-tint: rgba(255, 190, 11, 0.133);
+  --c3-tint: rgba(58, 134, 255, 0.133);
+  --c4-tint: rgba(131, 56, 236, 0.133);
+  --c5-tint: rgba(6, 214, 160, 0.133);
+
+  /* ────────────────────────────────────────────────────────
+     NEUTRAL PALETTE — deep dark theme
+     Only two background shades; layer them for depth.
+  ──────────────────────────────────────────────────────── */
+  --bg:        #0D0D0D;   /* page background */
+  --bg2:       #161616;   /* raised surfaces (about, cards, contact) */
+  --text:      #F5F5F5;   /* primary text */
+  --text-muted:#888888;   /* secondary text, labels */
+
+  /* Subtle white alphas used for borders + hover fills */
+  --white-04:  rgba(255, 255, 255, 0.04);  /* hairline fill */
+  --white-06:  rgba(255, 255, 255, 0.06);  /* card border */
+  --white-07:  rgba(255, 255, 255, 0.07);  /* skill-tag bg */
+  --white-10:  rgba(255, 255, 255, 0.10);  /* skill-tag border */
+  --white-20:  rgba(255, 255, 255, 0.20);  /* ghost button border */
+
+  /* ────────────────────────────────────────────────────────
+     SIGNATURE GRADIENTS
+     Used in logo, titles, CTAs. Always 135deg diagonal.
+  ──────────────────────────────────────────────────────── */
+  --grad-logo:     linear-gradient(135deg, var(--c1), var(--c2));                    /* logo text */
+  --grad-primary:  linear-gradient(135deg, var(--c1), var(--c4));                    /* primary button */
+  --grad-hero:     linear-gradient(135deg, var(--c1) 0%, var(--c2) 50%, var(--c3) 100%); /* animated hero title */
+  --grad-about:    linear-gradient(135deg, var(--c4) 0%, var(--c1) 100%);             /* about placeholder */
+  --grad-stat:     linear-gradient(135deg, var(--c1), var(--c2));                    /* stat numbers */
+
+  /* Work-card thumb gradients (pairs of @22% tints) */
+  --grad-thumb-red-yellow:  linear-gradient(135deg, var(--c1-tint), var(--c2-tint));
+  --grad-thumb-purple-blue: linear-gradient(135deg, var(--c4-tint), var(--c3-tint));
+  --grad-thumb-blue-mint:   linear-gradient(135deg, var(--c3-tint), var(--c5-tint));
+  --grad-thumb-yellow-red:  linear-gradient(135deg, var(--c2-tint), var(--c1-tint));
+
+  /* ────────────────────────────────────────────────────────
+     TYPOGRAPHY
+     Inter (Latin) + Noto Sans TC (Traditional Chinese).
+     Substituted from `Segoe UI, system-ui` in the source —
+     see README "Font Substitutions" for why.
+  ──────────────────────────────────────────────────────── */
+  --font: 'Inter', 'Noto Sans TC', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Type scale — fluid clamp() for display, fixed for body */
+  --fs-display-xl: clamp(3rem, 8vw, 7rem);      /* hero title        — 48→112px */
+  --fs-display-lg: clamp(2.5rem, 6vw, 5rem);    /* work page hero    — 40→80px  */
+  --fs-display-md: clamp(2rem, 5vw, 4rem);      /* contact title     — 32→64px  */
+  --fs-section:    clamp(2rem, 4vw, 3.5rem);    /* section titles    — 32→56px  */
+  --fs-subsection: clamp(1.8rem, 3vw, 2.8rem);  /* work subsections  — 29→45px  */
+  --fs-h3:         1.3rem;                      /* content h3        — 20.8px   */
+  --fs-body-lg:    1.15rem;                     /* hero sub          — 18.4px   */
+  --fs-body:       1rem;                        /* section text      — 16px     */
+  --fs-small:      0.9rem;                      /* nav links         — 14.4px   */
+  --fs-caption:    0.85rem;                     /* work desc         — 13.6px   */
+  --fs-micro:      0.8rem;                      /* tags              — 12.8px   */
+  --fs-tag:        0.75rem;                     /* section tags      — 12px     */
+  --fs-work-tag:   0.7rem;                      /* inline tags       — 11.2px   */
+
+  /* Weights */
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semi:    600;
+  --fw-bold:    700;
+  --fw-xbold:   800;
+  --fw-black:   900;
+
+  /* Letter spacing — tightened on display, loose on tags */
+  --ls-title: -2px;       /* hero title */
+  --ls-tight: -1px;       /* section titles */
+  --ls-semi:  -0.5px;     /* logo, work-page titles */
+  --ls-normal: 0;
+  --ls-wide:  0.5px;      /* nav links, work tags */
+  --ls-loose: 1px;        /* hero tags, highlight-box h4 */
+  --ls-xloose: 2px;       /* scroll indicator */
+  --ls-xxloose: 3px;      /* section-tag uppercase */
+
+  /* Line heights */
+  --lh-title: 1.05;       /* hero title */
+  --lh-heading: 1.1;      /* section titles */
+  --lh-body: 1.7;         /* paragraphs */
+  --lh-relaxed: 1.8;      /* work page body (longer) */
+  --lh-card: 1.6;         /* work card desc */
+
+  /* ────────────────────────────────────────────────────────
+     SPACING (rem-based, matching vanilla CSS paddings)
+  ──────────────────────────────────────────────────────── */
+  --space-1:   0.25rem;
+  --space-2:   0.5rem;
+  --space-3:   0.75rem;
+  --space-4:   1rem;
+  --space-5:   1.5rem;
+  --space-6:   2rem;
+  --space-8:   2.5rem;
+  --space-10:  3rem;
+  --space-12:  4rem;
+  --space-16:  6rem;
+  --space-20:  8rem;
+
+  /* ────────────────────────────────────────────────────────
+     RADII
+     Two radii only: pill (999px) for buttons/tags, 16px for cards.
+  ──────────────────────────────────────────────────────── */
+  --radius:       16px;    /* cards, images, highlight boxes */
+  --radius-sm:    8px;     /* highlight-box trailing corner */
+  --radius-xs:    4px;     /* work-tag chip */
+  --radius-pill:  999px;   /* buttons, tags, social links */
+
+  /* ────────────────────────────────────────────────────────
+     SHADOWS + GLOWS
+     Dark UI = soft black drops + colored glow for primary CTA.
+  ──────────────────────────────────────────────────────── */
+  --shadow-card:       0 20px 60px rgba(0, 0, 0, 0.5);             /* work-card hover */
+  --glow-primary:      0 8px 30px rgba(255, 77, 109, 0.3);         /* primary button rest */
+  --glow-primary-lg:   0 12px 40px rgba(255, 77, 109, 0.5);        /* primary button hover */
+
+  /* ────────────────────────────────────────────────────────
+     BLUR + BACKDROP
+  ──────────────────────────────────────────────────────── */
+  --blur-nav:    12px;      /* sticky nav backdrop-filter */
+  --blur-blob:   80px;      /* hero decorative blobs */
+
+  /* Nav bg — near-black w/ 85% opacity so blur shows through */
+  --bg-nav:      rgba(13, 13, 13, 0.85);
+  --bg-nav-work: rgba(13, 13, 13, 0.95);  /* work pages use heavier */
+  --bg-overlay:  rgba(0, 0, 0, 0.6);      /* card hover overlay */
+
+  /* ────────────────────────────────────────────────────────
+     MOTION
+     Fast hover feedback (200-300ms) + long ambient loops (4-12s).
+     Standard easing is `ease`. Everything uses transform+opacity.
+  ──────────────────────────────────────────────────────── */
+  --ease: ease;
+  --ease-in-out: ease-in-out;
+
+  --dur-hover:   200ms;     /* button/tag hover lift */
+  --dur-card:    300ms;     /* work card hover */
+  --dur-reveal:  700ms;     /* scroll reveal fade+slide */
+
+  --dur-grad:    4s;        /* gradient-text shift loop */
+  --dur-blob-1:  8s;
+  --dur-blob-2:  10s;
+  --dur-blob-3:  12s;
+  --dur-scroll:  2s;        /* scroll-line pulse */
+
+  /* Hover transforms — these are the signature interactions */
+  --lift-btn:  translateY(-3px);      /* buttons + social + skill tag */
+  --lift-card: translateY(-8px);      /* work card */
+}
+
+/* ============================================================
+   SEMANTIC BASE STYLES
+   Apply `.ds-root` to opt in to design-system defaults.
+   ============================================================ */
+.ds-root {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Display + Heading utilities */
+.ds-display-xl { font-size: var(--fs-display-xl); font-weight: var(--fw-black); letter-spacing: var(--ls-title); line-height: var(--lh-title); }
+.ds-display-lg { font-size: var(--fs-display-lg); font-weight: var(--fw-black); letter-spacing: var(--ls-tight);  line-height: var(--lh-heading); }
+.ds-display-md { font-size: var(--fs-display-md); font-weight: var(--fw-black); letter-spacing: var(--ls-tight);  line-height: var(--lh-heading); }
+.ds-h1 { font-size: var(--fs-section);    font-weight: var(--fw-black); letter-spacing: var(--ls-tight); line-height: var(--lh-heading); }
+.ds-h2 { font-size: var(--fs-subsection); font-weight: var(--fw-black); letter-spacing: var(--ls-semi);  line-height: var(--lh-heading); }
+.ds-h3 { font-size: var(--fs-h3);         font-weight: var(--fw-xbold); }
+
+/* Body text */
+.ds-lead  { font-size: var(--fs-body-lg); color: var(--text-muted); line-height: var(--lh-body); }
+.ds-body  { font-size: var(--fs-body);    color: var(--text-muted); line-height: var(--lh-relaxed); }
+.ds-small { font-size: var(--fs-small);   color: var(--text-muted); }
+
+/* Tags / eyebrows */
+.ds-section-tag {
+  font-size: var(--fs-tag);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-xxloose);
+  text-transform: uppercase;
+  color: var(--c1);
+}
+.ds-meta-label {
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-semi);
+  letter-spacing: var(--ls-loose);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Gradient text — apply to inline <span> */
+.ds-gradient-text {
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  background-size: 200% 200%;
+  animation: ds-grad-shift var(--dur-grad) var(--ease) infinite;
+}
+@keyframes ds-grad-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}

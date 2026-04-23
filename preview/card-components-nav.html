@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;800&display=swap" rel="stylesheet"><style>
+  html,body{margin:0;background:#0D0D0D;color:#F5F5F5;font-family:'Inter',system-ui,sans-serif}
+  .nav{padding:14px 28px;display:flex;justify-content:space-between;align-items:center;background:rgba(13,13,13,.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.05)}
+  .logo{font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,#FF4D6D,#FFBE0B);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-.5px}
+  .links{display:flex;gap:2rem;list-style:none;margin:0;padding:0}
+  .links a{color:#888;text-decoration:none;font-size:.9rem;font-weight:500;letter-spacing:.5px}
+  .links a.active{color:#F5F5F5}
+  .bg{min-height:80px;background:radial-gradient(circle at 80% 20%,rgba(255,77,109,.15),transparent 50%),radial-gradient(circle at 20% 80%,rgba(131,56,236,.12),transparent 50%),#0D0D0D}
+  .lbl{padding:12px 28px;font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#888}
+</style></head><body>
+<nav class="nav">
+  <div class="logo">YN.</div>
+  <ul class="links"><li><a href="#">About</a></li><li><a class="active" href="#">Works</a></li><li><a href="#">Contact</a></li></ul>
+</nav>
+<div class="bg"></div>
+<div class="lbl">Fixed nav · bg @85% + backdrop-blur(12px) · hairline bottom border · logo uses grad-logo clip</div>
+</body></html>
